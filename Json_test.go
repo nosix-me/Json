@@ -111,6 +111,12 @@ func TestJson(t *testing.T) {
 
 	js.Set("test2", "setTest")
 	log.Println("setTest" == js.Get("test2").MustString())
+
+	_, ok = js.Get("test").CheckGet("string")
+	log.Println(ok)
+	js.Get("test").Del("string")
+	_, ok = js.Get("test").CheckGet("string")
+	log.Println(ok)
 }
 
 func TestStdlibInterfaces(t *testing.T) {

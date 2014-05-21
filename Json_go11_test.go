@@ -1,4 +1,4 @@
-// +build go1.1
+// +build !go1.1
 
 // Copyright 2014 Json authors
 //
@@ -25,6 +25,7 @@ import (
 )
 
 func TestJsonGo11(t *testing.T) {
+	log.Println("TestJsonGo11")
 	js, err := NewJson([]byte(`{ 
 		"test": { 
 			"array": [1, "2", 3],

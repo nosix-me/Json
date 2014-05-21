@@ -112,6 +112,18 @@ func (j *Json) Set(key string, value interface{}) {
 	m[key] = value
 }
 
+// Del delete 'key' from json
+//   js.Get("test").Del("string")
+func (j *Json) Del(key string) error {
+	m, err := j.Map()
+	if err != nil {
+		return errors.New("Delete key from json failed!")
+	}
+	delete(m, key)
+	j = &Json{m}
+	return nil
+}
+
 // CheckGet returns a pointer to a new `Json` object and
 // a `bool` identifying success or failure
 //
