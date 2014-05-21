@@ -112,7 +112,8 @@ func (j *Json) Set(key string, value interface{}) {
 	m[key] = value
 }
 
-//Del delete 'key' from map
+// Del delete 'key' from json
+//   js.Get("test").Del("string")
 func (j *Json) Del(key string) error {
 	m, err := j.Map()
 	if err != nil {
@@ -120,11 +121,6 @@ func (j *Json) Del(key string) error {
 	}
 	delete(m, key)
 	j = &Json{m}
-	// r, err := json.Marshal(m)
-	// if err != nil {
-	// 	return errors.New("Convert data to json failed!")
-	// }
-	// j = &r
 	return nil
 }
 
