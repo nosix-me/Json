@@ -25,6 +25,7 @@ import (
 )
 
 func TestJsonGo11(t *testing.T) {
+	log.Println("TestJsonGo11")
 	js, err := NewJson([]byte(`{ 
 		"test": { 
 			"array": [1, "2", 3],
