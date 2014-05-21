@@ -1,4 +1,4 @@
-// +build go1.1
+// +build !go1.1
 
 // Copyright 2014 Json authors
 //
