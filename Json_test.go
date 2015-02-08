@@ -119,7 +119,7 @@ func TestJson(t *testing.T) {
 	log.Println(ok)
 
 	js.SetPath([]string{"test", "array"}, []int{1, 2, 3, 4})
-	array := js.GetPath("test", "array").([]int)
+	array := js.GetPath("test", "array").Interface().([]int)
 	log.Println(len(array) == 4)
 }
 

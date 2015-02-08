@@ -1,6 +1,6 @@
 Json
 ========
-[![Build Status](https://drone.io/github.com/widuu/goini/status.png)](https://drone.io/github.com/nosix-me/Json/8)
+[![Build Status](https://drone.io/github.com/widuu/goini/status.png)](https://drone.io/github.com/nosix-me/Json/lasted)
 
 ##描述
 
