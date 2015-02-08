@@ -117,6 +117,10 @@ func TestJson(t *testing.T) {
 	js.Get("test").Del("string")
 	_, ok = js.Get("test").CheckGet("string")
 	log.Println(ok)
+
+	js.SetPath([]string{"test", "array"}, []int{1, 2, 3, 4})
+	array := js.GetPath("test", "array").([]int)
+	log.Println(len(array) == 4)
 }
 
 func TestStdlibInterfaces(t *testing.T) {

@@ -23,7 +23,7 @@ import (
 
 // Version returns the current version.
 func Version() string {
-	return "0.1.0"
+	return "0.1.1"
 }
 
 type Json struct {
@@ -35,9 +35,19 @@ func (j *Json) Encode() ([]byte, error) {
 	return j.MarshalJSON()
 }
 
+//EncodePretty returns its marshaled data as '[]byte' with indentation
+func (j *Json) EncodePretty() ([]byte, error) {
+	return json.MarshalIndent(j.data, "", " ")
+}
+
 // MarshalJSON implements json.Marshal interface
 func (j *Json) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&j.data)
+}
+
+// Interface returns the underlying data
+func (j *Json) Interface() interface{} {
+	return j.data
 }
 
 // NewJson returns a pointer to a new 'Json' object
@@ -49,6 +59,13 @@ func NewJson(body []byte) (*Json, error) {
 		return nil, err
 	}
 	return j, nil
+}
+
+// New returns a pointer to a new empty "Json" object
+func New() *Json {
+	return &Json{
+		data: make(map[string]interface{}),
+	}
 }
 
 // Get returns a pointer to a new 'Json' object
@@ -112,6 +129,46 @@ func (j *Json) Set(key string, value interface{}) {
 	m[key] = value
 }
 
+// SetPath modifies `Json`, recursively checking/creating map keys for the supplied path,
+// and then finally writing in the value
+func (j *Json) SetPath(branch []string, value interface{}) {
+	if len(branch) == 0 {
+		j.data = value
+		return
+	}
+
+	// in order to insert our branch, we need map[string]interface{}
+	if _, ok := (j.data).(map[string]interface{}); !ok {
+		// have to replace with something suitable
+		j.data = make(map[string]interface{})
+	}
+	curr := j.data.(map[string]interface{})
+
+	for i := 0; i < len(branch)-1; i++ {
+		b := branch[i]
+		// key exists?
+		if _, ok := curr[b]; !ok {
+			n := make(map[string]interface{})
+			curr[b] = n
+			curr = n
+			continue
+		}
+
+		// make sure the value is the right sort of thing
+		if _, ok := curr[b].(map[string]interface{}); !ok {
+			// have to replace with something suitable
+			n := make(map[string]interface{})
+			curr[b] = n
+		}
+
+		curr = curr[b].(map[string]interface{})
+	}
+
+	// add remaining k/v
+	curr[branch[len(branch)-1]] = value
+
+}
+
 // Del delete 'key' from json
 //   js.Get("test").Del("string")
 func (j *Json) Del(key string) error {
@@ -120,7 +177,6 @@ func (j *Json) Del(key string) error {
 		return errors.New("Delete key from json failed!")
 	}
 	delete(m, key)
-	j = &Json{m}
 	return nil
 }
 
